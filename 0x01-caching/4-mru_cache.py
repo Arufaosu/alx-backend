@@ -1,41 +1,46 @@
 #!/usr/bin/env python3
-"""4-mru_cache.py"""
+"""MRUCache: Cache with Most Recently Used algorithm
+"""
 from base_caching import BaseCaching
 from collections import deque
 
 
-class LRUCache(BaseCaching):
-    """LRU caching system"""
+class MRUCache(BaseCaching):
+    """MRU caching system
+    """
 
     def __init__(self):
-        """initializes the caching system"""
+        """Initialize the caching system
+        """
         super().__init__()
-        self.lru_keys = deque()
+        self.mru_keys = deque()
 
     def put(self, key, item):
-        """adds an item in the cache"""
+        """Add an item in the cache
+        """
         if key and item:
             if len(self.cache_data) == self.MAX_ITEMS \
                     and key not in self.cache_data:
-                key_to_remove = self.lru_keys.pop()
+                key_to_remove = self.mru_keys.popleft()
                 self.cache_data.pop(key_to_remove)
                 print('DISCARD:', key_to_remove)
 
             self.cache_data[key] = item
 
-            if key in self.lru_keys:
-                self.lru_keys.remove(key)
+            if key in self.mru_keys:
+                self.mru_keys.remove(key)
 
-            self.lru_keys.appendleft(key)
+            self.mru_keys.appendleft(key)
 
     def get(self, key):
-        """gets an item by key"""
+        """Get an item by key
+        """
         item = self.cache_data.get(key)
 
         if item:
-            if key in self.lru_keys:
-                self.lru_keys.remove(key)
+            if key in self.mru_keys:
+                self.mru_keys.remove(key)
 
-            self.lru_keys.appendleft(key)
+            self.mru_keys.appendleft(key)
 
         return item
