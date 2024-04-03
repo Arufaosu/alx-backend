@@ -1,5 +1,7 @@
 #!/usr/bin/python3
 """1-fifo_cache.py"""
+from base_caching import BaseCaching
+from collections import deque
 
 class FIFOCache(BaseCaching):
     """FIFOCache class"""
@@ -7,23 +9,24 @@ class FIFOCache(BaseCaching):
     def __init__(self):
         """Initialize"""
         super().__init__()
+        self.first_in_keys = deque()
 
     def put(self, key, item):
         """Add an item to the cache"""
-        if key is None or item is None:
-            return
+        if key and item:
+            if len(self.cache_data) == self.MAX_ITEMS \
+                    and key not in self.cache_data:
+                key_to_remove = self.first_in_keys.pop()
+                self.cache_data.pop(key_to_remove)
+                print('DISCARD:', key_to_remove)
 
-        if len(self.cache_data) >= self.MAX_ITEMS:
-            # Get the first item inserted into the cache
-            discarded_key = next(iter(self.cache_data))
-            del self.cache_data[discarded_key]
-            print(f"DISCARD: {discarded_key}")
+                self.cache_data[key] = item
 
-        self.cache_data[key] = item
+                if key in self.first_in_keys:
+                    self.first_in_keys.remove(key)
 
-    def get(self, key):
+                self.first_in_keys.appendleft(key)
+        
+        def get(self, key):
         """Retrieve an item from the cache"""
-        if key is None or key not in self.cache_data:
-            return None
-
-        return self.cache_data[key]
+        return self.cache_data.get(key)
