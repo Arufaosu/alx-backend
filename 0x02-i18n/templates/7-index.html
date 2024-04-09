@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="{{ get_locale() }}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ _('Home Page') }}</title>
+</head>
+<body>
+    <p>
+        {% if g.user %}
+            {% if get_locale() == 'fr' %}
+                {{ gettext('logged_in_as') | format(username=g.user['name']) }}
+            {% else %}
+                {{ gettext('logged_in_as') | format(username=g.user['name']) }}
+            {% endif %}
+        {% else %}
+            {% if get_locale() == 'fr' %}
+                {{ gettext('not_logged_in') }}
+            {% else %}
+                {{ gettext('not_logged_in') }}
+            {% endif %}
+        {% endif %}
+    </p>
+    
+    <p>
+        {% if get_timezone() %}
+            {{ _('Your timezone is %(timezone)s.') | format(timezone=get_timezone()) }}
+        {% else %}
+            {{ _('Your timezone is not set.') }}
+        {% endif %}
+    </p>
+</body>
+</html>

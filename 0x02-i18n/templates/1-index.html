@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Internationalization Example</title>
+</head>
+<body>
+    <h1>{{ _('Welcome to our Website!') }}</h1>
+    
+    <p>{{ _('This is a simple example of internationalization using Flask-Babel.') }}</p>
+    
+    <p>{{ _('You can select your preferred language below:') }}</p>
+    
+    <form action="{{ url_for('set_language') }}" method="POST">
+        <select name="language">
+            {% for lang in get_languages() %}
+                <option value="{{ lang }}">{{ lang }}</option>
+            {% endfor %}
+        </select>
+        <button type="submit">{{ _('Change Language') }}</button>
+    </form>
+</body>
+</html>
