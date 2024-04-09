@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
+"""7-app.py"""
 from flask import Flask, render_template, request, g
-from flask_babel import Babel, gettext
+from flask_babel import Babel
 import pytz
 
 app = Flask(__name__)
 babel = Babel(app)
 
-# Mock user table
 users = {
     1: {"name": "Balou", "locale": "fr", "timezone": "Europe/Paris"},
     2: {"name": "Beyonce", "locale": "en", "timezone": "US/Central"},
@@ -23,8 +23,8 @@ def before_request():
     g.user = get_user(int(login_as)) if login_as else None
 
 @babel.timezoneselector
-def get_timezone():
-    # 1. Find timezone parameter in URL parameters
+def get_timezozne():
+    """timezone"""
     if 'timezone' in request.args:
         requested_timezone = request.args.get('timezone')
         try:
@@ -33,7 +33,6 @@ def get_timezone():
         except pytz.exceptions.UnknownTimeZoneError:
             pass
 
-    # 2. Find time zone from user settings
     if g.user and g.user['timezone']:
         try:
             pytz.timezone(g.user['timezone'])
@@ -41,7 +40,6 @@ def get_timezone():
         except pytz.exceptions.UnknownTimeZoneError:
             pass
 
-    # 3. Default to UTC
     return 'UTC'
 
 @app.route('/')
